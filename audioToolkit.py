@@ -46,6 +46,18 @@ def fftBlocks(blocks_time_domain):
     return fft_blocks
 
 
+def reverseFftBlocks(blocks_ft_domain):
+    time_blocks = []
+    for block in blocks_ft_domain:
+        num_elems = block.shape[0] / 2
+        real_chunk = block[0:num_elems]
+        imag_chunk = block[num_elems:]
+        new_block = real_chunk + 1.0j * imag_chunk
+        time_block = np.fft.ifft(new_block)
+        time_blocks.append(time_block)
+    return time_blocks
+
+
 def readWav(wavFile):
     bitrate, loadedData = wav.read(wavFile)
     data = loadedData.astype('float32') / 32767.0
